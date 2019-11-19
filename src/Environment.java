@@ -8,12 +8,13 @@ public class Environment {
     }
     private int starting_Carnivores = 20;
     private int starting_Herbivores = 20;
-
-    Agent [][] area = new Agent[30][30];
+    int n = 30;
+    int m = 30;
+    Agent [][] area = new Agent[n][m];
     Environment(){
 
-        for(int i = 0; i < 30; i++){
-            for(int j = 0; j < 30; j++){
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
                 //10 percent chance for plant growth on each block
                 int rand = randomNumber.nextInt(10);
                 if(rand ==0) {
@@ -22,21 +23,21 @@ public class Environment {
             }
         }
         for(int i = 0; i < starting_Carnivores; i++){
-            int X =  randomNumber.nextInt(30);
-            int Y =  randomNumber.nextInt(30);
+            int X =  randomNumber.nextInt(n);
+            int Y =  randomNumber.nextInt(m);
 
             while(area[X][Y] != null){
-                X =  randomNumber.nextInt(30);
-                Y =  randomNumber.nextInt(30);
+                X =  randomNumber.nextInt(n);
+                Y =  randomNumber.nextInt(m);
             }
             area[X][Y] = new Carnivores(X,Y);
         }
         for(int i = 0; i < starting_Herbivores; i++){
-            int X =  randomNumber.nextInt(30);
-            int Y =  randomNumber.nextInt(30);
+            int X =  randomNumber.nextInt(n);
+            int Y =  randomNumber.nextInt(m);
             while(area[X][Y] != null){
-                X =  randomNumber.nextInt(30);
-                Y =  randomNumber.nextInt(30);
+                X =  randomNumber.nextInt(n);
+                Y =  randomNumber.nextInt(m);
             }
             area[X][Y] = new Herbivores(X,Y);
         }
@@ -44,8 +45,8 @@ public class Environment {
 
     }
     public void runSimulation(){
-        for(int i = 0; i < 30; i++){
-            for(int j = 0; j < 30; j++){
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
                 int rand = randomNumber.nextInt(100);
                 //5 Percent chance for plant growth each block.
                 if(area[i][j] == null && rand < 5){
@@ -62,8 +63,8 @@ public class Environment {
     }
 
     private void resetAction(){
-        for(int i = 0; i < 30; i++){
-            for(int j = 0; j < 30; j++){
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
                 if(area[i][j] != null){
                     area[i][j].setActionTaken(false);
                 }
@@ -72,8 +73,8 @@ public class Environment {
     }
 
     public void getMap_and_Dead(){
-        for(int i = 0 ; i < 30 ; i ++){
-            for(int j = 0; j < 30; j++){
+        for(int i = 0 ; i < n ; i ++){
+            for(int j = 0; j < m; j++){
                 if(area[i][j] == null){
                     System.out.print(" _ ");
                 }else{
@@ -93,8 +94,8 @@ public class Environment {
         int total_PlantLife = 0;
         int total_Carnivores = 0;
         int total_Herbivores = 0;
-        for(int i = 0 ; i < 30; i++){
-            for(int j = 0; j < 30; j++){
+        for(int i = 0 ; i < n; i++){
+            for(int j = 0; j < m; j++){
                 if(area[i][j] != null) {
                     if (area[i][j] instanceof Plant) {
                         total_PlantLife++;
@@ -109,4 +110,14 @@ public class Environment {
         System.out.printf("%nTotal Plants: %d, %nTotal Carnivores: %d, %nTotal Herbivores: %d%n",total_PlantLife,total_Carnivores,total_Herbivores);
     }
 
+    public boolean isCompletelyDead() {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (area[i][j] instanceof Plant || area[i][j] instanceof Carnivores || area[i][j] instanceof Herbivores) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }
